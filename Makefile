@@ -1,4 +1,4 @@
-CC=clang
+CC=cc
 CFLAGS=-Wall -Wextra -std=c99 -pedantic-errors
 BIN=as_wdc6502
 OBJS=asm.o dir.o err.o instr.o main.o prog.o scan.o

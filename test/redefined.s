@@ -1,0 +1,3 @@
+; Label redefinition
+test:
+test:

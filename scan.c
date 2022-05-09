@@ -43,7 +43,7 @@ tok scan_discard_line(scanner *s)
 static bool space(scanner *s)
 {
     char c = peek(s);
-    return c == ' ' || c == '\t';
+    return c == ' ' || c == '\t' || c == '\r';
 }
 
 static bool dec(scanner *s)
@@ -72,7 +72,7 @@ static bool idhead(scanner *s)
 
 static bool idbody(scanner *s)
 {
-    return idhead(s) || dec(s);
+    return idhead(s) || dec(s) || peek(s) == '.';
 }
 
 static bool punct(scanner *s)

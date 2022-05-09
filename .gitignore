@@ -1,3 +1,4 @@
 .DS_Store
 as_wdc6502
 *.o
+wdc6502.rom

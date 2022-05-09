@@ -12,7 +12,7 @@ void err_set_max(int max)
     max_err = max;
 }
 
-int err_get_num()
+int err_total()
 {
     return errs;
 }

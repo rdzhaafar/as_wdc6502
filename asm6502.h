@@ -20,7 +20,7 @@ void err(char *fmt, ...);
 void err_at(char *fmt, ...);
 #define err_die(FMT, ...) err(FMT, __VA_ARGS__); exit(EXIT_FAILURE)
 #define err_die_at(FMT, ...) err_at(FMT, __VA_ARGS__); exit(EXIT_FAILURE)
-int err_get_num();
+int err_total();
 
 // scan.c
 typedef enum {
@@ -55,7 +55,7 @@ tok scan_discard_line(scanner *s);
 typedef struct {
     char *path;
     int line;
-    bool isabs; // Absolute addressing mode relocation
+    bool isabs;
     char *need;
     int pc;
 } relocation;
@@ -67,7 +67,7 @@ typedef struct {
 } symbol;
 
 typedef struct {
-    unsigned char data[WORD_MAX];
+    unsigned char data[WORD_MAX + 1];
     int pc;
     relocation *relocs;
     int relocs_len;

@@ -54,36 +54,57 @@ void asm_all(program *p, char **srcs, int srcs_len)
     }
 }
 
-// 65C02 vectors
-#define RESB_LO ((unsigned char)0xFFFD)
-#define RESB_HI ((unsigned char)0xFFFC)
-#define BRK_HI  ((unsigned char)0xFFFF)
-#define BRK_LO  ((unsigned char)0xFFFE)
-#define NMIB_HI ((unsigned char)0xFFFB)
-#define NMIB_LO ((unsigned char)0xFFFA)
+typedef enum {
+    RESB_HI = 0xFFFD,
+    RESB_LO = 0xFFFC,
+    BRK_HI  = 0xFFFF,
+    BRK_LO  = 0xFFFE,
+    NMIB_HI = 0xFFFB,
+    NMIB_LO = 0xFFFA,
+} vectors;
 
 void asm_link(program *p)
 {
+    long long addr;
+    unsigned char hi, lo;
     for (int i = 0; i < p->relocs_len; i++) {
-        relocation r = p->relocs[i];
-        err_set_loc(r.path, r.line);
-        long long addr;
-        if (!prog_get_sym(p, r.need, true, &addr)) {
-            err_at("label %s is not defined", r.need);
+        relocation *r = &p->relocs[i];
+        err_set_loc(r->path, r->line);
+        if (!prog_get_sym(p, r->need, true, &addr)) {
+            err_at("label %s is not defined", r->need);
             continue;
         }
-        if (!r.isabs && addr > BYTE_MAX) {
-            err_at("label %s is larger than 0xFF (%d)", r.need, addr);
+        if (!r->isabs && addr > BYTE_MAX) {
+            err_at("label %s is out of range for relative addressing",
+                    r->need, addr);
             continue;
         }
-        unsigned char hi, lo;
         hi = (addr >> 8) & 0xFF;
         lo = addr & 0xFF;
-        if (r.isabs) {
-            p->data[r.pc] = hi;
-            p->data[r.pc + 1] = lo;
+        if (r->isabs) {
+            p->data[r->pc] = hi;
+            p->data[r->pc + 1] = lo;
         } else {
-            p->data[r.pc] = lo;
+            p->data[r->pc] = lo;
         }
+    }
+
+    if (prog_get_sym(p, "_resb", true, &addr)) {
+        lo = addr & 0xFF;
+        hi = (addr >> 8) & 0xFF;
+        p->data[RESB_HI] = hi;
+        p->data[RESB_LO] = lo;
+    }
+    if (prog_get_sym(p, "_nmib", true, &addr)) {
+        lo = addr & 0xFF;
+        hi = (addr >> 8) & 0xFF;
+        p->data[NMIB_HI] = hi;
+        p->data[NMIB_LO] = lo;
+    }
+    if (prog_get_sym(p, "_brk", true, &addr)) {
+        lo = addr & 0xFF;
+        hi = (addr >> 8) & 0xFF;
+        p->data[BRK_HI] = hi;
+        p->data[BRK_LO] = lo;
     }
 }

@@ -39,6 +39,11 @@ void prog_add_reloc(program *p, char *need, bool isabs, char *path, int line)
 
 void prog_add_sym(program *p, char *name, long long val, bool lab)
 {
+    long long _;
+    if (prog_get_sym(p, name, lab, &_)) {
+        err_at("%s is already defined", name);
+        return;
+    }
     if (p->syms_len == p->syms_cap) {
         int cap = p->syms_cap * 2;
         p->syms = realloc(p->syms, cap);
@@ -65,7 +70,7 @@ bool prog_get_sym(program *p, char *name, bool lab, long long *val)
 
 void prog_write(program *p, char *path)
 {
-    int errs = err_get_num();
+    int errs = err_total();
     if (errs) {
         err_die("%d errors total, refusing to write output", errs);
     }
