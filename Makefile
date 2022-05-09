@@ -31,4 +31,4 @@ scan.o: scan.c
 	$(CC) $(CFLAGS) -c -o $@ $?
 
 $(BIN): $(OBJS)
-	$(CC) -o $@ $?
+	$(CC) -o $@ $^
