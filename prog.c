@@ -21,7 +21,7 @@ void prog_add_byte(program *p, unsigned char b)
     p->pc++;
 }
 
-void prog_add_reloc(program *p, char *need, bool isabs, char *path, int line)
+void prog_add_reloc(program *p, char *need, bool isabs, bool isrel, char *path, int line)
 {
     if (p->relocs_len == p->relocs_cap) {
         int cap = p->relocs_cap * 2;
@@ -34,6 +34,7 @@ void prog_add_reloc(program *p, char *need, bool isabs, char *path, int line)
     p->relocs[i].need = need;
     p->relocs[i].pc = p->pc;
     p->relocs[i].isabs = isabs;
+    p->relocs[i].isrel = isrel;
     p->relocs_len++;
 }
 

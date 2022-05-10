@@ -71,20 +71,32 @@ void asm_link(program *p)
         relocation *r = &p->relocs[i];
         err_set_loc(r->path, r->line);
         if (!prog_get_sym(p, r->need, true, &addr)) {
-            err_at("label %s is not defined", r->need);
+            err_at("%s is not defined", r->need);
             continue;
         }
-        if (!r->isabs && addr > BYTE_MAX) {
-            err_at("label %s is out of range for relative addressing",
-                    r->need, addr);
-            continue;
-        }
-        hi = (addr >> 8) & 0xFF;
-        lo = addr & 0xFF;
         if (r->isabs) {
+            // Absolute relocation
+            hi = (addr >> 8) & 0xFF;
+            lo = addr & 0xFF;
             p->data[r->pc] = hi;
             p->data[r->pc + 1] = lo;
+        } else if (r->isrel) {
+            // PC-relative relocation
+            char rel = addr - r->pc;
+            int br = addr - r->pc;
+            if (br != rel) {
+                err_at("%s is out of range for relative addressing", r->need);
+                continue;
+            }
+            // pointer magic preserves the sign bit
+            p->data[r->pc] = *((unsigned char *) &rel);
         } else {
+            // Zero-page offset
+            if (addr > BYTE_MAX) {
+                err_at("%s is out of range for zero-page addressing", r->need);
+                continue;
+            }
+            lo = addr & 0xFF;
             p->data[r->pc] = lo;
         }
     }

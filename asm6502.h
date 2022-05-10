@@ -56,6 +56,7 @@ typedef struct {
     char *path;
     int line;
     bool isabs;
+    bool isrel;
     char *need;
     int pc;
 } relocation;
@@ -80,7 +81,7 @@ typedef struct {
 // prog.c
 void prog_init(program *p);
 void prog_add_byte(program *p, unsigned char b);
-void prog_add_reloc(program *p, char *need, bool isabs, char *fpath, int line);
+void prog_add_reloc(program *p, char *need, bool isabs, bool isrel, char *fpath, int line);
 void prog_add_sym(program *p, char *name, long long val, bool lab);
 bool prog_get_sym(program *p, char *name, bool lab, long long *val);
 void prog_write(program *p, char *path);

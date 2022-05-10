@@ -454,7 +454,8 @@ void instr_asm(program *p, scanner *s, int instr)
             prog_add_byte(p, hi);
             prog_add_byte(p, lo);
         } else {
-            prog_add_reloc(p, op.sym, true, s->path, s->line);
+            // Absolute relocation
+            prog_add_reloc(p, op.sym, true, false, s->path, s->line);
             prog_add_byte(p, 0);
             prog_add_byte(p, 0);
         }
@@ -490,7 +491,13 @@ void instr_asm(program *p, scanner *s, int instr)
         if (op.is_imm) {
             prog_add_byte(p, (unsigned char)op.imm);
         } else {
-            prog_add_reloc(p, op.sym, false, s->path, s->line);
+            if (i_am == AM_PCR) {
+                // PC-relative relocation
+                prog_add_reloc(p, op.sym, false, true, s->path, s->line);
+            } else {
+                // Zero-page relocation
+                prog_add_reloc(p, op.sym, false, false, s->path, s->line);
+            }
             prog_add_byte(p, 0);
         }
         prog_add_byte(p, opc);
