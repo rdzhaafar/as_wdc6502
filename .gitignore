@@ -1,4 +1,5 @@
 .DS_Store
 as_wdc6502
 *.o
+instr_lookup.c
 wdc6502.rom
