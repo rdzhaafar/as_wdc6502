@@ -25,9 +25,9 @@ next:
         goto next;
     }
 
-    int instr = instr_get(mnem);
-    if (instr != NONE) {
-        instr_asm(p, s, instr);
+    instruction i = instr_get(mnem);
+    if (i != NULL) {
+        instr_asm(p, s, i);
         goto next;
     }
     int dir = dir_get(mnem);

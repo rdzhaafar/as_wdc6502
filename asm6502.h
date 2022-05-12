@@ -87,8 +87,9 @@ bool prog_get_sym(program *p, char *name, bool lab, long long *val);
 void prog_write(program *p, char *path);
 
 // instr.c
-int instr_get(char *mnem);
-void instr_asm(program *p, scanner *s, int instr);
+typedef void *instruction;
+instruction instr_get(char *mnem);
+void instr_asm(program *p, scanner *s, instruction i);
 
 // dir.c
 int dir_get(char *name);
