@@ -1,5 +1,5 @@
-#ifndef ASM6502_H
-#define ASM6502_H
+#ifndef AS_WDC6502_H
+#define AS_WDC6502_H
 
 // Maximum 8 and 16 bit values
 #define BYTE_MAX ((int)0xFF)

@@ -1,4 +1,4 @@
-#include "asm6502.h"
+#include "as_wdc6502.h"
 #include <stdarg.h>
 
 static int max_err = 10;

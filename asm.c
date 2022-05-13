@@ -1,4 +1,4 @@
-#include "asm6502.h"
+#include "as_wdc6502.h"
 
 static void asm_src(program *p, scanner *s)
 {

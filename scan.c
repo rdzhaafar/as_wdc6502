@@ -1,4 +1,4 @@
-#include "asm6502.h"
+#include "as_wdc6502.h"
 #include <ctype.h>
 
 static tok set(scanner *s, tok t)
