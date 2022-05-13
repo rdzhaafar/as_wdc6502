@@ -1,6 +1,6 @@
 %define lookup_function_name instr_get_intern
 %{
-#include "asm6502.h"
+#include "as_wdc6502.h"
 #include "instr.h"
 %}
 %struct-type
