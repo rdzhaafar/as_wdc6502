@@ -13,7 +13,7 @@ void prog_init(program *p)
 
 void prog_add_byte(program *p, unsigned char b)
 {
-    if (p->pc > WORD_MAX) {
+    if (p->pc > ADDR_MAX) {
         err_at("program too large");
         return;
     }
@@ -79,6 +79,6 @@ void prog_write(program *p, char *path)
     if (!out) {
         err_die("can't open %s", path);
     }
-    fwrite(p->data, WORD_MAX, 1, out);
+    fwrite(p->data, ADDR_MAX, 1, out);
     fclose(out);
 }

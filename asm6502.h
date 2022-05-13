@@ -4,6 +4,8 @@
 // Maximum 8 and 16 bit values
 #define BYTE_MAX ((int)0xFF)
 #define WORD_MAX ((int)0xFFFF)
+// Maximum memory address
+#define ADDR_MAX WORD_MAX + 1
 // Indicates no results
 #define NONE     ((int)-1)
 
@@ -68,7 +70,7 @@ typedef struct {
 } symbol;
 
 typedef struct {
-    unsigned char data[WORD_MAX + 1];
+    unsigned char data[ADDR_MAX];
     int pc;
     relocation *relocs;
     int relocs_len;
